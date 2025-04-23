@@ -3,6 +3,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  const participantsList = document.getElementById("participants-list");
+
+  // Function to update participant info
+  function updateParticipants(activityDetails) {
+    const participants = activityDetails.participants;
+    const participantsUl = participantsList.querySelector("ul");
+
+    participantsUl.innerHTML = ""; // Clear existing list
+
+    if (participants.length > 0) {
+      participants.forEach((participant) => {
+        const li = document.createElement("li");
+        li.textContent = participant;
+        participantsUl.appendChild(li);
+      });
+    } else {
+      const li = document.createElement("li");
+      li.textContent = "No participants yet";
+      participantsUl.appendChild(li);
+    }
+  }
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -38,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const option = document.createElement("option");
         option.value = name;
         option.textContent = name;
+        option.addEventListener("click", () => updateParticipants(details));
         activitySelect.appendChild(option);
       });
     } catch (error) {
